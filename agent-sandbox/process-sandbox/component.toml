@@ -1,0 +1,25 @@
+manifest_version = 2
+
+[component]
+name = "process-sandbox"
+version = "0.0.0"
+layer = "runtime"
+domain = "security"
+description = "Standalone Linux process sandbox (linux-sandbox binary)"
+stability = "experimental"
+
+[install]
+modes = ["system"]
+
+[backends.rpm]
+
+[environment]
+requires_os = "linux"
+
+[dependencies]
+runtime = ["bubblewrap"]
+
+[[health_checks]]
+name = "binary"
+kind = "command"
+command = "{bindir}/linux-sandbox --help"
