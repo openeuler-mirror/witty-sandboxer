@@ -1,0 +1,60 @@
+# 用户扩展规则
+#
+# rules.py 导入时读取本文件，只追加内置规则没有覆盖的命令。
+# 与 rules.py 冲突时以内置定义为准，冲突条目会忽略并打印到 stderr。
+# 不能用本文件删除或改写内置规则。
+#
+# 怎么写
+#   下面每个字段已经是一个列表。行首带 # 的是示例，不会生效。
+#   要启用某一条，删掉该行行首的「# 」（保留前面的空格）。
+#   不要把内容写进 []。[] 只表示空列表；一旦有条目，就改成「-」开头的多行列表。
+#   纯字符串也可以写成一行：safe_commands: [jq, tree]
+#
+# 已被 rules.py 占用、写进来会被忽略的名字：
+#   内置 command、command_prefix（含以该前缀开头的命令）、pattern、安全命令名。
+
+# 直接拒绝。每条需要 command / command_prefix / pattern 之一，以及 reason。
+destructive:
+  # - command: mkswap
+  #   reason: 创建交换分区
+  # - command_prefix: wipefs
+  #   reason: 擦除文件系统签名
+  # - pattern: ":(){ :|:& };:"
+  #   reason: Fork 炸弹
+
+# 沙箱执行，禁止自动补权限。
+dangerous:
+  # - command: useradd
+  #   reason: 创建系统用户
+
+# 无条件只读命令。这里只写命令名。
+safe_commands:
+  # - jq
+  # - tree
+
+# 仅 Linux 的无条件只读命令。
+safe_commands_linux:
+  # - lsattr
+
+# 带禁止参数的只读命令。参数命中 deny_args 时不再视为 safe。
+safe_conditional:
+  # - command: sort
+  #   deny_args: ["-o", "--output", "--output="]
+  #   deny_arg_prefixes: ["-o"]
+  #   reason: sort 无输出文件参数
+
+# 脚本里出现这些符号时，不做 bash -c 安全拆分。
+shell_unsafe_operators:
+  # - "|&"
+
+# 允许出现在安全链式命令中的分隔符。
+shell_safe_operators:
+  # - "|&"
+
+# default 命令可自动补的网络或写路径。grant 至少写 network 或 write_paths 之一。
+permissions:
+  # - command: gh
+  #   subcommands: [api, repo]
+  #   grant:
+  #     network: true
+  #     write_paths: ["/opt/gh"]
