@@ -1,0 +1,177 @@
+# Copyright 2025 The OpenSandbox Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Runtime-facing snapshot creation interfaces.
+
+The server owns snapshot resources and lifecycle persistence. Runtime
+implementations are responsible for performing concrete snapshot operations and
+reporting whether snapshot creation is supported for the active backend.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Optional, Protocol
+
+from opensandbox_server.services.snapshot_models import SnapshotState
+
+
+@dataclass(frozen=True)
+class SnapshotRuntimeStatus:
+    state: SnapshotState
+    image: Optional[str] = None
+    reason: Optional[str] = None
+    message: Optional[str] = None
+    # Backend marker persisted into restore_config on READY (e.g. "fsb") so
+    # create-time routing can send restores to the owning backend.
+    backend: Optional[str] = None
+
+
+class SnapshotRuntimePreflightError(RuntimeError):
+    """Snapshot creation cannot safely start for the current source runtime."""
+
+
+class SnapshotRuntimeUnsupportedError(SnapshotRuntimePreflightError):
+    """The source runtime is known to be incompatible with snapshot creation."""
+
+
+class SnapshotRuntime(Protocol):
+    def supports_create_snapshot(self) -> bool:
+        """
+        Whether this runtime supports creating snapshots.
+        """
+
+    def create_snapshot_unsupported_message(self) -> str:
+        """
+        Human-readable message used when snapshot creation is unsupported.
+        """
+
+    def preflight_create_snapshot(
+        self,
+        sandbox_id: str,
+        *,
+        namespace: str | None = None,
+    ) -> None:
+        """Validate source-specific compatibility before persisting a snapshot."""
+
+    def create_snapshot(
+        self,
+        snapshot_id: str,
+        sandbox_id: str,
+        *,
+        namespace: str | None = None,
+    ) -> Optional[SnapshotRuntimeStatus]:
+        """
+        Create a snapshot for a sandbox and return the final runtime status.
+        """
+
+    def get_snapshot_status(self, snapshot_id: str) -> Optional[SnapshotRuntimeStatus]:
+        """
+        Return the most recent runtime view for a snapshot if known.
+        """
+
+    def delete_snapshot(
+        self,
+        snapshot_id: str,
+        image: Optional[str] = None,
+        *,
+        namespace: str | None = None,
+        source_sandbox_id: str | None = None,
+    ) -> None:
+        """
+        Delete runtime-managed artifacts for a snapshot.
+
+        ``source_sandbox_id`` identifies the owning backend for composite
+        dispatch; runtimes that serve one backend only ignore it.
+        """
+
+    def inspect_snapshot(
+        self,
+        snapshot_id: str,
+        image: Optional[str] = None,
+        *,
+        namespace: str | None = None,
+        source_sandbox_id: str | None = None,
+    ) -> SnapshotRuntimeStatus:
+        """
+        Inspect runtime-managed artifacts for startup recovery.
+        """
+
+
+class NoopSnapshotRuntime:
+    """
+    Placeholder runtime used when snapshot execution is not yet wired.
+    """
+
+    def supports_create_snapshot(self) -> bool:
+        return False
+
+    def create_snapshot_unsupported_message(self) -> str:
+        return "Snapshot management is not implemented for this runtime."
+
+    def preflight_create_snapshot(
+        self,
+        sandbox_id: str,
+        *,
+        namespace: str | None = None,
+    ) -> None:
+        raise SnapshotRuntimeUnsupportedError(
+            self.create_snapshot_unsupported_message()
+        )
+
+    def create_snapshot(
+        self,
+        snapshot_id: str,
+        sandbox_id: str,
+        *,
+        namespace: str | None = None,
+    ) -> Optional[SnapshotRuntimeStatus]:
+        raise NotImplementedError(self.create_snapshot_unsupported_message())
+
+    def get_snapshot_status(self, snapshot_id: str) -> Optional[SnapshotRuntimeStatus]:
+        return None
+
+    def delete_snapshot(
+        self,
+        snapshot_id: str,
+        image: Optional[str] = None,
+        *,
+        namespace: str | None = None,
+        source_sandbox_id: str | None = None,
+    ) -> None:
+        return None
+
+    def inspect_snapshot(
+        self,
+        snapshot_id: str,
+        image: Optional[str] = None,
+        *,
+        namespace: str | None = None,
+        source_sandbox_id: str | None = None,
+    ) -> SnapshotRuntimeStatus:
+        return SnapshotRuntimeStatus(
+            state=SnapshotState.FAILED,
+            reason="snapshot_recovery_not_supported",
+            message="Snapshot recovery is not implemented for this runtime.",
+        )
+
+
+__all__ = [
+    "SnapshotRuntime",
+    "SnapshotRuntimePreflightError",
+    "SnapshotRuntimeStatus",
+    "SnapshotRuntimeUnsupportedError",
+    "NoopSnapshotRuntime",
+]
