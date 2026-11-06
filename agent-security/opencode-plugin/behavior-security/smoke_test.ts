@@ -1,3 +1,7 @@
+// Copyright (c) KylinSoft Co., Ltd. 2026. All rights reserved.
+// witty-sandboxer is licensed under the Apache License, Version 2.0.
+// See LICENSE file for more details.
+
 // 行为安全插件冒烟：用真实 sandbox-policy 走 before/after。
 //   SANDBOX_POLICY=sandbox-policy/.venv/bin/sandbox-policy \
 //     bun opencode-plugin/behavior-security/smoke_test.ts

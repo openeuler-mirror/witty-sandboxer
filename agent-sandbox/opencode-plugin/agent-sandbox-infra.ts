@@ -1,3 +1,8 @@
+// Copyright (c) KylinSoft Co., Ltd. 2026. All rights reserved.
+// witty-sandboxer is licensed under the Apache License, Version 2.0.
+// See LICENSE file for more details.
+
+
 import path from "path"
 import { existsSync } from "node:fs"
 

@@ -1,0 +1,38 @@
+ANOLISA
+Copyright 2026 Alibaba Cloud
+
+This product includes software developed at Alibaba Cloud.
+
+Copyright (c) KylinSoft Co., Ltd. 2026. All rights reserved.
+witty-sandboxer is licensed under the Apache License, Version 2.0.
+See LICENSE file for more details.
+
+=========================================================================
+Derived Works
+=========================================================================
+
+process-sandbox (agent-sandbox/process-sandbox/)
+  Fork from: https://github.com/agentic-os-org/ANOLISA/tree/main/src/agent-sec-core/linux-sandbox
+  Copyright 2026 Alibaba Cloud
+  Licensed under the Apache License, Version 2.0
+
+  That component is itself based on Codex linux-sandbox
+  (https://github.com/openai/codex/tree/main/codex-rs/linux-sandbox)
+  Copyright 2025 OpenAI
+  Licensed under the Apache License, Version 2.0
+
+sandbox-policy (agent-security/sandbox-policy/)
+  Derived in part from ANOLISA Agent Security Core
+  (https://github.com/agentic-os-org/ANOLISA/tree/main/src/agent-sec-core/agent-sec-cli/src/agent_sec_cli/sandbox)
+  Copyright 2026 Alibaba Cloud
+  Licensed under the Apache License, Version 2.0
+
+opensandbox (agent-sandbox/opensandbox/)
+  Fork from: https://github.com/opensandbox-group/OpenSandbox
+  Copyright 2025-2026 The OpenSandbox Authors
+  Licensed under the Apache License, Version 2.0
+
+  Source files in this tree keep their own copyright headers. Those headers
+  must stay with the files. This repository does not grant any right to the
+  OpenSandbox name, logo, or other trademarks beyond what is needed to
+  identify the upstream project.

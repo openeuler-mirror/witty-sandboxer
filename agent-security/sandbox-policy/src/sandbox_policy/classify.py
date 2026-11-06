@@ -1,3 +1,8 @@
+# Copyright (c) KylinSoft Co., Ltd. 2026.All rights reserved.
+# witty-sandboxer is licensed under the Apache License, Version 2.0.
+# See LICENSE file for more details.
+# This file was modified by KylinSoft Co., Ltd. on 2026-11-06.
+
 """
 命令安全分类器 - 四层分类 + 统一规则引擎
 

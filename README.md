@@ -48,7 +48,7 @@ sandbox_runner.py ──► OpenSandbox SDK ──► 容器
 
 ## 能力
 
-**进程沙箱（`linux-sandbox`）**
+**进程沙箱（**`linux-sandbox`**）**
 
 - 文件系统默认只读，按策略开放工作目录、`/tmp` 或指定绝对路径的写权限。
 - 可写根下的 `.git`、`.agents`、`.copilot-shell` 仍保持只读，降低符号链接替换受保护路径的可能。
@@ -57,7 +57,7 @@ sandbox_runner.py ──► OpenSandbox SDK ──► 容器
 - 启用限制时设置 `PR_SET_NO_NEW_PRIVS`。
 - 单目录自包含，可单独拷贝后用 `make build` 编译。
 
-**命令策略（`sandbox-policy`）**
+**命令策略（**`sandbox-policy`**）**
 
 四层分类，优先级从高到低：
 
@@ -249,4 +249,16 @@ make package        # dist/process-sandbox-<version>.tar.gz
 ## 安全边界
 
 这套机制约束的是 Agent 经策略进入沙箱的命令：文件系统视图、网络系统调用和提权标志。分类基于命令拆分与规则匹配，复杂 shell 语法、解释器内部执行和已授予网络后的出站行为，仍取决于对应规则是否覆盖。容器路径的隔离强度由 OpenSandbox 与底层容器运行时决定。
+
+## 来源与许可证
+
+本仓库以 [Apache License 2.0](LICENSE) 发布。第三方与衍生代码的归属见 [NOTICE](NOTICE)。NOTICE 只记录来源和版权，不改变许可证条款。
+
+| 路径                                                                 | 关系   | 上游                                                                                                                       |
+| ------------------------------------------------------------------ | ---- | ------------------------------------------------------------------------------------------------------------------------ |
+| [`agent-sandbox/process-sandbox/`](agent-sandbox/process-sandbox/) | 开源衍生 | Fork from：https://github.com/agentic-os-org/ANOLISA/tree/main/src/agent-sec-core/linux-sandbox                           |
+| [`agent-security/sandbox-policy/`](agent-security/sandbox-policy/) | 开源衍生 | Fork from：https://github.com/agentic-os-org/ANOLISA/tree/main/src/agent-sec-core/agent-sec-cli/src/agent_sec_cli/sandbox |
+| [`agent-sandbox/opensandbox/`](agent-sandbox/opensandbox/)         | 开源衍生 | Fork from：https://github.com/opensandbox-group/OpenSandbox                                                               |
+
+`process-sandbox` 的再上游是 OpenAI Codex 的 linux-sandbox：https://github.com/openai/codex/tree/main/codex-rs/linux-sandbox 。三层都是 Apache-2.0。
 

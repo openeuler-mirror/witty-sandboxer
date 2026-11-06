@@ -153,3 +153,9 @@ process-sandbox/
 └── README.md
 ```
 
+## 来源与许可证
+
+Fork from：https://github.com/agentic-os-org/ANOLISA/tree/main/src/agent-sec-core/linux-sandbox
+
+再上游：https://github.com/openai/codex/tree/main/codex-rs/linux-sandbox （Copyright 2025 OpenAI，Apache-2.0）。ANOLISA 侧版权为 Copyright 2026 Alibaba Cloud，同样是 Apache-2.0。归属说明见本目录 [NOTICE](NOTICE)，许可证正文见 [LICENSE](LICENSE)。单独拷贝或 `make package` 时，这两份文件必须跟发行包走。
+

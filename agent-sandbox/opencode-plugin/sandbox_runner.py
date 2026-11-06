@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+# Copyright (c) KylinSoft Co., Ltd. 2026. All rights reserved.
+# witty-sandboxer is licensed under the Apache License, Version 2.0.
+# See LICENSE file for more details.
+
+
 """
 OpenSandbox Agent Infra Runner
 ===============================
