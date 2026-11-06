@@ -48,7 +48,8 @@ package: build ## Build a deployable tarball in $(DIST_DIR)
 		stage="$(DIST_DIR)/process-sandbox-$$ver"; \
 		rm -rf "$$stage"; mkdir -p "$$stage/bin"; \
 		cp -p target/release/$(BIN) "$$stage/bin/"; \
-		cp -p README.md README_zh.md LICENSE Cargo.toml Cargo.lock rust-toolchain.toml "$$stage/" 2>/dev/null || true; \
+		cp -p README.md LICENSE NOTICE Cargo.toml Cargo.lock rust-toolchain.toml "$$stage/"; \
+		cp -p README_zh.md "$$stage/" 2>/dev/null || true; \
 		tar -czf "$(DIST_DIR)/process-sandbox-$$ver.tar.gz" -C "$(DIST_DIR)" "process-sandbox-$$ver"; \
 		rm -rf "$$stage"; \
 		echo "📦 $(DIST_DIR)/process-sandbox-$$ver.tar.gz"

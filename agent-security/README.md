@@ -75,3 +75,11 @@ make uninstall-behavior-plugin   # 只卸载行为安全插件
 - 行为安全入口：`opencode-plugin/behavior-security/agent-behavior-sec.ts` → `<PLUGIN_DIR>/agent-behavior-sec.ts`
 - opencode 启动时会自动加载插件目录下的文件，因此安装/卸载后均需重启 opencode。
 - 插件说明见 `opencode-plugin/README.md` 与 `opencode-plugin/behavior-security/README.md`。
+
+## 来源与许可证
+
+`sandbox-policy/` 的命令分类与沙箱策略生成有一部分来自 ANOLISA。
+
+Fork from：https://github.com/agentic-os-org/ANOLISA/tree/main/src/agent-sec-core/agent-sec-cli/src/agent_sec_cli/sandbox
+
+该上游位于 ANOLISA Agent Security Core 内，Copyright 2026 Alibaba Cloud，Apache License 2.0。归属说明见 [`sandbox-policy/NOTICE`](sandbox-policy/NOTICE)。
